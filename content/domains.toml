@@ -1,0 +1,713 @@
+# AZ-104 skills-measured outline -- the backbone of the whole system.
+# Source (study guide): https://learn.microsoft.com/credentials/certifications/resources/study-guides/az-104
+# Source (cert page):    https://learn.microsoft.com/credentials/certifications/azure-administrator/
+#
+# Exam: AZ-104 "Microsoft Azure Administrator"
+#   -> Microsoft Certified: Azure Administrator Associate
+#
+# OUTLINE VERSION captured: "Skills measured as of October 26, 2023".
+# Captured 2026-11-01 via the Microsoft Learn MCP (microsoft_docs_fetch of the live study guide).
+# Bullet text below is VERBATIM -- do not paraphrase. Question generation and the freshness diff
+# both depend on exact wording.
+#
+# `prior_cert` values: none | partial | strong  -- drives the effort-allocation dashboard.
+#   Tuned for THE LEARNER (see CLAUDE.md): strong in security + networking, newer to Azure
+#   compute / storage / identity / governance specifics.
+# `hours` is the planned study allocation, deliberately NOT proportional to exam weight --
+#   allocated by GAP SIZE (thin where strong, heavy where new).
+# `week` is the 4-week study-plan slot (see progress/study-plan.md).
+
+schema_version = 1
+exam_code = "AZ-104"
+exam_title = "Microsoft Azure Administrator"
+certification = "Microsoft Certified: Azure Administrator Associate"
+study_guide_url = "https://learn.microsoft.com/credentials/certifications/resources/study-guides/az-104"
+exam_page_url = "https://learn.microsoft.com/credentials/certifications/azure-administrator/"
+outline_captured = 2026-11-01
+status = "live"
+total_planned_hours = 54.2
+
+# sample_weight = normalized midpoint of each domain's weight range; all five sum to 1.0.
+#   midpoints 22.5 / 17.5 / 22.5 / 17.5 / 12.5 (sum 92.5) normalized below.
+
+# ===========================================================================
+[[domains]]
+id = "D1"
+title = "Manage Azure identities and governance"
+weight_min = 20
+weight_max = 25
+sample_weight = 0.2432
+
+[[domains.subdomains]]
+id = "D1.1"
+title = "Manage Microsoft Entra users and groups"
+learn_path = ""
+
+[[domains.subdomains.objectives]]
+id = "D1.1.1"
+text = "Create users and groups"
+prior_cert = "partial"
+hours = 0.75
+week = 1
+
+[[domains.subdomains.objectives]]
+id = "D1.1.2"
+text = "Manage user and group properties"
+prior_cert = "partial"
+hours = 0.5
+week = 1
+
+[[domains.subdomains.objectives]]
+id = "D1.1.3"
+text = "Manage licenses in Microsoft Entra ID"
+prior_cert = "none"
+hours = 0.5
+week = 1
+
+[[domains.subdomains.objectives]]
+id = "D1.1.4"
+text = "Manage external users"
+prior_cert = "partial"
+hours = 0.75
+week = 1
+
+[[domains.subdomains.objectives]]
+id = "D1.1.5"
+text = "Configure self-service password reset (SSPR)"
+prior_cert = "partial"
+hours = 0.5
+week = 1
+
+[[domains.subdomains]]
+id = "D1.2"
+title = "Manage access to Azure resources"
+learn_path = ""
+
+[[domains.subdomains.objectives]]
+id = "D1.2.1"
+text = "Manage built-in Azure roles"
+prior_cert = "strong"
+hours = 0.5
+week = 1
+
+[[domains.subdomains.objectives]]
+id = "D1.2.2"
+text = "Assign roles at different scopes"
+prior_cert = "strong"
+hours = 0.5
+week = 1
+
+[[domains.subdomains.objectives]]
+id = "D1.2.3"
+text = "Interpret access assignments"
+prior_cert = "partial"
+hours = 0.75
+week = 1
+
+[[domains.subdomains]]
+id = "D1.3"
+title = "Manage Azure subscriptions and governance"
+learn_path = ""
+
+[[domains.subdomains.objectives]]
+id = "D1.3.1"
+text = "Implement and manage Azure Policy"
+prior_cert = "none"
+hours = 1.0
+week = 1
+
+[[domains.subdomains.objectives]]
+id = "D1.3.2"
+text = "Configure resource locks"
+prior_cert = "partial"
+hours = 0.5
+week = 1
+
+[[domains.subdomains.objectives]]
+id = "D1.3.3"
+text = "Apply and manage tags on resources"
+prior_cert = "none"
+hours = 0.5
+week = 1
+
+[[domains.subdomains.objectives]]
+id = "D1.3.4"
+text = "Manage resource groups"
+prior_cert = "partial"
+hours = 0.5
+week = 1
+
+[[domains.subdomains.objectives]]
+id = "D1.3.5"
+text = "Manage subscriptions"
+prior_cert = "none"
+hours = 0.75
+week = 1
+
+[[domains.subdomains.objectives]]
+id = "D1.3.6"
+text = "Manage costs by using alerts, budgets, and Azure Advisor recommendations"
+prior_cert = "none"
+hours = 1.0
+week = 1
+
+[[domains.subdomains.objectives]]
+id = "D1.3.7"
+text = "Configure management groups"
+prior_cert = "none"
+hours = 0.75
+week = 1
+
+# ===========================================================================
+[[domains]]
+id = "D2"
+title = "Implement and manage storage"
+weight_min = 15
+weight_max = 20
+sample_weight = 0.1892
+
+[[domains.subdomains]]
+id = "D2.1"
+title = "Configure access to storage"
+learn_path = ""
+
+[[domains.subdomains.objectives]]
+id = "D2.1.1"
+text = "Configure Azure Storage firewalls and virtual networks"
+prior_cert = "partial"
+hours = 0.5
+week = 2
+
+[[domains.subdomains.objectives]]
+id = "D2.1.2"
+text = "Create and use shared access signature (SAS) tokens"
+prior_cert = "partial"
+hours = 0.75
+week = 2
+
+[[domains.subdomains.objectives]]
+id = "D2.1.3"
+text = "Configure stored access policies"
+prior_cert = "none"
+hours = 0.75
+week = 2
+
+[[domains.subdomains.objectives]]
+id = "D2.1.4"
+text = "Manage access keys"
+prior_cert = "strong"
+hours = 0.5
+week = 2
+
+[[domains.subdomains.objectives]]
+id = "D2.1.5"
+text = "Configure identity-based access for Azure Files"
+prior_cert = "partial"
+hours = 0.75
+week = 2
+
+[[domains.subdomains]]
+id = "D2.2"
+title = "Configure and manage storage accounts"
+learn_path = ""
+
+[[domains.subdomains.objectives]]
+id = "D2.2.1"
+text = "Create and configure storage accounts"
+prior_cert = "none"
+hours = 1.0
+week = 2
+
+[[domains.subdomains.objectives]]
+id = "D2.2.2"
+text = "Configure Azure Storage redundancy"
+prior_cert = "none"
+hours = 1.0
+week = 2
+
+[[domains.subdomains.objectives]]
+id = "D2.2.3"
+text = "Configure object replication"
+prior_cert = "none"
+hours = 0.75
+week = 2
+
+[[domains.subdomains.objectives]]
+id = "D2.2.4"
+text = "Configure storage account encryption"
+prior_cert = "partial"
+hours = 0.75
+week = 2
+
+[[domains.subdomains.objectives]]
+id = "D2.2.5"
+text = "Manage data by using Azure Storage Explorer and AzCopy"
+prior_cert = "none"
+hours = 0.75
+week = 2
+
+[[domains.subdomains]]
+id = "D2.3"
+title = "Configure Azure Files and Azure Blob Storage"
+learn_path = ""
+
+[[domains.subdomains.objectives]]
+id = "D2.3.1"
+text = "Create and configure a file share in Azure Storage"
+prior_cert = "none"
+hours = 0.75
+week = 2
+
+[[domains.subdomains.objectives]]
+id = "D2.3.2"
+text = "Create and configure a container in Blob Storage"
+prior_cert = "none"
+hours = 0.75
+week = 2
+
+[[domains.subdomains.objectives]]
+id = "D2.3.3"
+text = "Configure storage tiers"
+prior_cert = "none"
+hours = 0.75
+week = 2
+
+[[domains.subdomains.objectives]]
+id = "D2.3.4"
+text = "Configure snapshots and soft delete for Azure Files"
+prior_cert = "none"
+hours = 0.75
+week = 2
+
+[[domains.subdomains.objectives]]
+id = "D2.3.5"
+text = "Configure blob lifecycle management"
+prior_cert = "none"
+hours = 0.75
+week = 2
+
+[[domains.subdomains.objectives]]
+id = "D2.3.6"
+text = "Configure blob versioning"
+prior_cert = "none"
+hours = 0.5
+week = 2
+
+# ===========================================================================
+[[domains]]
+id = "D3"
+title = "Deploy and manage Azure compute resources"
+weight_min = 20
+weight_max = 25
+sample_weight = 0.2432
+
+[[domains.subdomains]]
+id = "D3.1"
+title = "Automate deployment of resources by using Azure Resource Manager (ARM) templates or Bicep files"
+learn_path = ""
+
+[[domains.subdomains.objectives]]
+id = "D3.1.1"
+text = "Interpret an Azure Resource Manager template or a Bicep file"
+prior_cert = "none"
+hours = 1.0
+week = 2
+
+[[domains.subdomains.objectives]]
+id = "D3.1.2"
+text = "Modify an existing Azure Resource Manager template"
+prior_cert = "none"
+hours = 1.0
+week = 2
+
+[[domains.subdomains.objectives]]
+id = "D3.1.3"
+text = "Modify an existing Bicep file"
+prior_cert = "none"
+hours = 1.0
+week = 2
+
+[[domains.subdomains.objectives]]
+id = "D3.1.4"
+text = "Deploy resources by using an Azure Resource Manager template or a Bicep file"
+prior_cert = "none"
+hours = 0.75
+week = 2
+
+[[domains.subdomains.objectives]]
+id = "D3.1.5"
+text = "Export a deployment as an Azure Resource Manager template or convert an Azure Resource Manager template to a Bicep file"
+prior_cert = "none"
+hours = 0.75
+week = 2
+
+[[domains.subdomains]]
+id = "D3.2"
+title = "Create and configure virtual machines"
+learn_path = ""
+
+[[domains.subdomains.objectives]]
+id = "D3.2.1"
+text = "Create a virtual machine"
+prior_cert = "partial"
+hours = 0.75
+week = 3
+
+[[domains.subdomains.objectives]]
+id = "D3.2.2"
+text = "Configure Azure Disk Encryption"
+prior_cert = "partial"
+hours = 0.5
+week = 3
+
+[[domains.subdomains.objectives]]
+id = "D3.2.3"
+text = "Move a virtual machine to another resource group, subscription, or region"
+prior_cert = "none"
+hours = 0.5
+week = 3
+
+[[domains.subdomains.objectives]]
+id = "D3.2.4"
+text = "Manage virtual machine sizes"
+prior_cert = "partial"
+hours = 0.5
+week = 3
+
+[[domains.subdomains.objectives]]
+id = "D3.2.5"
+text = "Manage virtual machine disks"
+prior_cert = "partial"
+hours = 0.75
+week = 3
+
+[[domains.subdomains.objectives]]
+id = "D3.2.6"
+text = "Deploy virtual machines to availability zones and availability sets"
+prior_cert = "none"
+hours = 1.0
+week = 3
+
+[[domains.subdomains.objectives]]
+id = "D3.2.7"
+text = "Deploy and configure an Azure Virtual Machine Scale Sets"
+prior_cert = "none"
+hours = 1.0
+week = 3
+
+[[domains.subdomains]]
+id = "D3.3"
+title = "Provision and manage containers in the Azure portal"
+learn_path = ""
+
+[[domains.subdomains.objectives]]
+id = "D3.3.1"
+text = "Create and manage an Azure container registry"
+prior_cert = "none"
+hours = 0.75
+week = 3
+
+[[domains.subdomains.objectives]]
+id = "D3.3.2"
+text = "Provision a container by using Azure Container Instances"
+prior_cert = "none"
+hours = 0.75
+week = 3
+
+[[domains.subdomains.objectives]]
+id = "D3.3.3"
+text = "Provision a container by using Azure Container Apps"
+prior_cert = "none"
+hours = 0.75
+week = 3
+
+[[domains.subdomains.objectives]]
+id = "D3.3.4"
+text = "Manage sizing and scaling for containers, including Azure Container Instances and Azure Container Apps"
+prior_cert = "none"
+hours = 0.5
+week = 3
+
+[[domains.subdomains]]
+id = "D3.4"
+title = "Create and configure Azure App Service"
+learn_path = ""
+
+[[domains.subdomains.objectives]]
+id = "D3.4.1"
+text = "Provision an App Service plan"
+prior_cert = "none"
+hours = 0.75
+week = 3
+
+[[domains.subdomains.objectives]]
+id = "D3.4.2"
+text = "Configure scaling for an App Service plan"
+prior_cert = "none"
+hours = 0.5
+week = 3
+
+[[domains.subdomains.objectives]]
+id = "D3.4.3"
+text = "Create an App Service"
+prior_cert = "none"
+hours = 0.5
+week = 3
+
+[[domains.subdomains.objectives]]
+id = "D3.4.4"
+text = "Configure certificates and Transport Layer Security (TLS) for an App Service"
+prior_cert = "partial"
+hours = 0.5
+week = 3
+
+[[domains.subdomains.objectives]]
+id = "D3.4.5"
+text = "Map an existing custom DNS name to an App Service"
+prior_cert = "partial"
+hours = 0.5
+week = 3
+
+[[domains.subdomains.objectives]]
+id = "D3.4.6"
+text = "Configure backup for an App Service"
+prior_cert = "none"
+hours = 0.5
+week = 3
+
+[[domains.subdomains.objectives]]
+id = "D3.4.7"
+text = "Configure networking settings for an App Service"
+prior_cert = "partial"
+hours = 0.5
+week = 3
+
+[[domains.subdomains.objectives]]
+id = "D3.4.8"
+text = "Configure deployment slots for an App Service"
+prior_cert = "none"
+hours = 0.75
+week = 3
+
+# ===========================================================================
+[[domains]]
+id = "D4"
+title = "Implement and manage virtual networking"
+weight_min = 15
+weight_max = 20
+sample_weight = 0.1892
+
+[[domains.subdomains]]
+id = "D4.1"
+title = "Configure and manage virtual networks in Azure"
+learn_path = ""
+
+[[domains.subdomains.objectives]]
+id = "D4.1.1"
+text = "Create and configure virtual networks and subnets"
+prior_cert = "strong"
+hours = 0.5
+week = 3
+
+[[domains.subdomains.objectives]]
+id = "D4.1.2"
+text = "Create and configure virtual network peering"
+prior_cert = "partial"
+hours = 0.5
+week = 3
+
+[[domains.subdomains.objectives]]
+id = "D4.1.3"
+text = "Configure public IP addresses"
+prior_cert = "strong"
+hours = 0.5
+week = 3
+
+[[domains.subdomains.objectives]]
+id = "D4.1.4"
+text = "Configure user-defined network routes"
+prior_cert = "partial"
+hours = 0.5
+week = 3
+
+[[domains.subdomains.objectives]]
+id = "D4.1.5"
+text = "Troubleshoot network connectivity"
+prior_cert = "partial"
+hours = 0.5
+week = 3
+
+[[domains.subdomains]]
+id = "D4.2"
+title = "Configure secure access to virtual networks"
+learn_path = ""
+
+[[domains.subdomains.objectives]]
+id = "D4.2.1"
+text = "Create and configure network security groups (NSGs) and application security groups"
+prior_cert = "strong"
+hours = 0.5
+week = 3
+
+[[domains.subdomains.objectives]]
+id = "D4.2.2"
+text = "Evaluate effective security rules in NSGs"
+prior_cert = "strong"
+hours = 0.5
+week = 3
+
+[[domains.subdomains.objectives]]
+id = "D4.2.3"
+text = "Implement Azure Bastion"
+prior_cert = "strong"
+hours = 0.5
+week = 3
+
+[[domains.subdomains.objectives]]
+id = "D4.2.4"
+text = "Configure service endpoints for Azure platform as a service (PaaS)"
+prior_cert = "strong"
+hours = 0.5
+week = 3
+
+[[domains.subdomains.objectives]]
+id = "D4.2.5"
+text = "Configure private endpoints for Azure PaaS"
+prior_cert = "partial"
+hours = 0.5
+week = 3
+
+[[domains.subdomains]]
+id = "D4.3"
+title = "Configure name resolution and load balancing"
+learn_path = ""
+
+[[domains.subdomains.objectives]]
+id = "D4.3.1"
+text = "Configure Azure DNS"
+prior_cert = "partial"
+hours = 0.5
+week = 3
+
+[[domains.subdomains.objectives]]
+id = "D4.3.2"
+text = "Configure an internal or public load balancer"
+prior_cert = "partial"
+hours = 0.75
+week = 3
+
+[[domains.subdomains.objectives]]
+id = "D4.3.3"
+text = "Troubleshoot load balancing"
+prior_cert = "partial"
+hours = 0.5
+week = 3
+
+# ===========================================================================
+[[domains]]
+id = "D5"
+title = "Monitor and maintain Azure resources"
+weight_min = 10
+weight_max = 15
+sample_weight = 0.1351
+
+[[domains.subdomains]]
+id = "D5.1"
+title = "Monitor resources in Azure"
+learn_path = ""
+
+[[domains.subdomains.objectives]]
+id = "D5.1.1"
+text = "Interpret metrics in Azure Monitor"
+prior_cert = "none"
+hours = 0.75
+week = 4
+
+[[domains.subdomains.objectives]]
+id = "D5.1.2"
+text = "Configure log settings in Azure Monitor"
+prior_cert = "none"
+hours = 0.75
+week = 4
+
+[[domains.subdomains.objectives]]
+id = "D5.1.3"
+text = "Query and analyze logs in Azure Monitor"
+prior_cert = "none"
+hours = 1.0
+week = 4
+
+[[domains.subdomains.objectives]]
+id = "D5.1.4"
+text = "Set up alert rules, action groups, and alert processing rules in Azure Monitor"
+prior_cert = "partial"
+hours = 0.75
+week = 4
+
+[[domains.subdomains.objectives]]
+id = "D5.1.5"
+text = "Configure and interpret monitoring of virtual machines, storage accounts, and networks by using Azure Monitor Insights"
+prior_cert = "partial"
+hours = 0.5
+week = 4
+
+[[domains.subdomains.objectives]]
+id = "D5.1.6"
+text = "Use Azure Network Watcher and Connection Monitor"
+prior_cert = "partial"
+hours = 0.5
+week = 4
+
+[[domains.subdomains]]
+id = "D5.2"
+title = "Implement backup and recovery"
+learn_path = ""
+
+[[domains.subdomains.objectives]]
+id = "D5.2.1"
+text = "Create a Recovery Services vault"
+prior_cert = "none"
+hours = 0.75
+week = 4
+
+[[domains.subdomains.objectives]]
+id = "D5.2.2"
+text = "Create an Azure Backup vault"
+prior_cert = "none"
+hours = 0.5
+week = 4
+
+[[domains.subdomains.objectives]]
+id = "D5.2.3"
+text = "Create and configure a backup policy"
+prior_cert = "none"
+hours = 0.75
+week = 4
+
+[[domains.subdomains.objectives]]
+id = "D5.2.4"
+text = "Perform backup and restore operations by using Azure Backup"
+prior_cert = "none"
+hours = 0.75
+week = 4
+
+[[domains.subdomains.objectives]]
+id = "D5.2.5"
+text = "Configure Azure Site Recovery for Azure resources"
+prior_cert = "none"
+hours = 1.0
+week = 4
+
+[[domains.subdomains.objectives]]
+id = "D5.2.6"
+text = "Perform a failover to a secondary region by using Site Recovery"
+prior_cert = "none"
+hours = 0.75
+week = 4
+
+[[domains.subdomains.objectives]]
+id = "D5.2.7"
+text = "Configure and interpret reports and alerts for backups"
+prior_cert = "none"
+hours = 0.5
+week = 4

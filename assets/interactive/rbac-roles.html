@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Azure access — the whole story (roles, permissions & the look-alikes)</title>
+<script>
+  (function(){ try{ var t=localStorage.getItem('az104-theme'); if(t) document.documentElement.dataset.theme=t; }catch(e){} })();
+</script>
+<style>
+:root{
+  --bg:#faf9f7; --surface:#fff; --surface-2:#f1efec; --ink:#1b1a18; --ink-2:#56524c; --ink-3:#8a8479;
+  --line:#e0dcd5; --accent:#0d6a63; --accent-soft:#e2f0ee; --risk:#a4451a; --risk-soft:#f9e8e0;
+  --ok:#2c6e3f; --ok-soft:#e2f0e6; --code-bg:#f4f2ef; --radius:8px;
+  --shadow:0 1px 2px rgba(0,0,0,.05),0 4px 14px rgba(0,0,0,.04);
+}
+:root[data-theme="dark"]{
+  --bg:#15171a; --surface:#1c1f23; --surface-2:#23272c; --ink:#e6e3de; --ink-2:#a8a49d; --ink-3:#726d66;
+  --line:#2e3338; --accent:#4fbfb4; --accent-soft:#16302e; --risk:#e08a5c; --risk-soft:#33231b;
+  --ok:#6dbb85; --ok-soft:#17271c; --code-bg:#191c20;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 4px 14px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.5;}
+.wrap{max-width:1000px;margin:0 auto;padding:20px 16px 60px;}
+header.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;margin-bottom:6px;}
+header.bar h1{font-size:1.15rem;margin:0;}
+header.bar .sub{color:var(--ink-3);font-size:13px;}
+.spacer{flex:1}
+a.back{font-size:13px;color:var(--accent);text-decoration:none}
+a.back:hover{text-decoration:underline}
+button{font:inherit;padding:7px 14px;border:1px solid var(--line);background:var(--surface);
+  color:var(--ink);border-radius:6px;cursor:pointer;}
+button:hover{border-color:var(--accent)}
+button:disabled{opacity:.4;cursor:default}
+button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+.stage{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+  padding:14px;box-shadow:var(--shadow);margin:10px 0;}
+.stage svg{display:block;width:100%;height:auto;color:var(--ink)}
+.stage svg text{fill:var(--ink);font-size:13px;font-family:inherit}
+.stage svg .muted{fill:var(--ink-3)}
+.stage svg .box{fill:var(--surface-2);stroke:var(--line);stroke-width:1.5}
+.stage svg .box-accent{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.5}
+.stage svg .box-risk{fill:var(--risk-soft);stroke:var(--risk);stroke-width:1.5}
+.stage svg .box-ok{fill:var(--ok-soft);stroke:var(--ok);stroke-width:1.5}
+.stage svg .line{stroke:var(--ink-3);stroke-width:1.5;fill:none}
+.stage svg .label-accent{fill:var(--accent);font-weight:600}
+.stage svg .label-risk{fill:var(--risk);font-weight:600}
+.stage svg .label-ok{fill:var(--ok);font-weight:600}
+.stage svg .node{transition:opacity .2s}
+.stage svg .node.dim{opacity:.22}
+.stage svg .node.on rect,.stage svg rect.on{stroke-width:2.5}
+.stage svg .ov{display:none}
+.stage svg .ov.show{display:inline}
+
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+  padding:16px 18px;box-shadow:var(--shadow);min-height:160px;}
+.panel h2{margin:0 0 8px;font-size:1.02rem;display:flex;gap:9px;align-items:baseline}
+.panel h2 .n{font-size:12px;color:#fff;background:var(--accent);border-radius:20px;padding:1px 9px;white-space:nowrap}
+.panel p{margin:7px 0}
+.panel ul{margin:7px 0;padding-left:20px}
+.panel li{margin:4px 0}
+code{background:var(--code-bg);padding:1px 5px;border-radius:4px;font-size:.92em}
+.t-risk{background:var(--risk-soft);color:var(--risk);font-weight:600;padding:0 .2em;border-radius:3px}
+.t-ok{background:var(--ok-soft);color:var(--ok);font-weight:600;padding:0 .2em;border-radius:3px}
+.t-term{background:var(--accent-soft);color:var(--accent);font-weight:600;padding:0 .2em;border-radius:3px}
+
+.controls{display:flex;align-items:center;gap:12px;margin-top:12px}
+.dots{display:flex;gap:6px;flex-wrap:wrap;flex:1}
+.dot{width:11px;height:11px;border-radius:50%;background:var(--line);border:none;padding:0;cursor:pointer}
+.dot.active{background:var(--accent)}
+.dot.trap{background:var(--risk-soft)}
+.dot.active{background:var(--accent)}
+.count{color:var(--ink-3);font-size:13px;min-width:54px;text-align:right}
+.note{color:var(--ink-3);font-size:12px;margin-top:14px}
+@media(max-width:640px){header.bar h1{font-size:1rem}}
+/* page annotations (notes.js) */
+body.az-adding,body.az-adding *{cursor:crosshair}
+.az-fab{position:fixed;right:18px;bottom:18px;z-index:9000;display:flex;align-items:center;gap:8px}
+.az-fab-main{position:relative;width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-size:20px;cursor:pointer;box-shadow:var(--shadow)}
+.az-fab-main:hover{border-color:var(--accent)}.az-fab-main.az-active{background:var(--accent);border-color:var(--accent)}
+.az-fab-count{position:absolute;top:-4px;right:-4px;min-width:18px;height:18px;padding:0 4px;border-radius:10px;background:var(--risk);color:#fff;font-size:11px;line-height:18px}
+.az-fab-count:empty{display:none}.az-fab-menu{display:flex;gap:6px}
+.az-fab-menu button,.az-fab-menu label{width:34px;height:34px;display:grid;place-items:center;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-size:15px;cursor:pointer;box-shadow:var(--shadow)}
+.az-fab-menu button:hover,.az-fab-menu label:hover{border-color:var(--accent)}
+.az-pin{position:absolute;z-index:8500;transform:translate(-50%,-50%);width:26px;height:26px;padding:0;border:1px solid var(--accent);border-radius:50% 50% 50% 2px;background:var(--accent-soft);font-size:14px;line-height:1;cursor:pointer;box-shadow:var(--shadow)}
+.az-pin:hover{outline:2px solid var(--accent)}.az-pin.az-empty{opacity:.6;border-style:dashed}
+.az-pop{position:absolute;z-index:9100;width:290px;background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);padding:10px}
+.az-pop textarea{width:100%;min-height:90px;resize:vertical;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font:inherit;font-size:14px;padding:8px}
+.az-pop-row{display:flex;align-items:center;margin-top:8px}.az-pop-row .az-spacer{flex:1}
+.az-pop-row button{font:inherit;padding:5px 12px;border-radius:6px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.az-pop-row .az-save{background:var(--accent);border-color:var(--accent);color:#fff}.az-pop-row .az-del{color:var(--risk);border-color:var(--risk-soft)}
+@media print{.az-fab,.az-pop{display:none!important}.az-pin{box-shadow:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="bar">
+    <h1>Azure access — the whole story</h1>
+    <span class="sub">roles, permissions &amp; the look-alikes · D1.2</span>
+    <span class="spacer"></span>
+    <button id="theme">Light / dark</button>
+  </header>
+
+  <div class="stage">
+    <svg viewBox="0 0 900 300" role="img" aria-label="A map of Azure access: left is the scope hierarchy from management group down to a blob container; right are the control plane (Actions) and data plane (DataActions); Alex is a user who receives role assignments; a callout strip surfaces the look-alike concepts such as Entra roles, deny assignments, classic admins and PIM">
+      <defs>
+        <marker id="arr" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L9,4 L0,8 z" class="muted"/></marker>
+      </defs>
+
+      <text x="30" y="22" class="label-accent">WHERE · scope (inherits ↓)</text>
+      <g class="node" id="s-mg"><rect class="box" x="40" y="32" width="235" height="30" rx="6"/><text x="157" y="51" text-anchor="middle">Management group</text></g>
+      <g class="node" id="s-sub"><rect class="box" x="40" y="72" width="235" height="30" rx="6"/><text x="157" y="91" text-anchor="middle">Subscription</text></g>
+      <g class="node" id="s-rg"><rect class="box" x="40" y="112" width="235" height="30" rx="6"/><text x="157" y="131" text-anchor="middle">Resource group</text></g>
+      <g class="node" id="s-sa"><rect class="box-accent" x="40" y="152" width="235" height="30" rx="6"/><text x="157" y="171" text-anchor="middle" class="label-accent">Storage account · sa-files</text></g>
+      <g class="node" id="s-blob"><rect class="box" x="40" y="192" width="235" height="30" rx="6"/><text x="157" y="211" text-anchor="middle">Blob container (data)</text></g>
+      <g class="node" id="inh">
+        <line class="line" x1="157" y1="62" x2="157" y2="72" marker-end="url(#arr)"/>
+        <line class="line" x1="157" y1="102" x2="157" y2="112" marker-end="url(#arr)"/>
+        <line class="line" x1="157" y1="142" x2="157" y2="152" marker-end="url(#arr)"/>
+        <line class="line" x1="157" y1="182" x2="157" y2="192" marker-end="url(#arr)"/>
+      </g>
+
+      <text x="320" y="22" class="label-accent">WHAT Alex can touch · two planes</text>
+      <g class="node" id="plane-control"><rect class="box" x="320" y="32" width="265" height="100" rx="7"/>
+        <text x="452" y="56" text-anchor="middle" class="label-accent">Control plane — Actions</text>
+        <text x="452" y="80" text-anchor="middle">create / delete / configure</text>
+        <text x="452" y="100" text-anchor="middle" class="muted">manage the account itself</text>
+        <text x="452" y="120" text-anchor="middle" class="muted">(Owner / Contributor / Reader)</text></g>
+      <g class="node" id="plane-data"><rect class="box" x="600" y="32" width="270" height="100" rx="7"/>
+        <text x="735" y="56" text-anchor="middle" class="label-accent">Data plane — DataActions</text>
+        <text x="735" y="80" text-anchor="middle">read / upload / delete blobs</text>
+        <text x="735" y="100" text-anchor="middle" class="muted">touch the data inside</text>
+        <text x="735" y="120" text-anchor="middle" class="muted">(Storage Blob Data *)</text></g>
+
+      <g class="node" id="alex"><rect class="box-accent" x="320" y="196" width="120" height="30" rx="6"/><text x="380" y="215" text-anchor="middle">Alex (user)</text></g>
+      <g class="node ov" id="chip-owner"><rect class="box-ok" x="320" y="152" width="190" height="26" rx="6"/><text x="415" y="169" text-anchor="middle" class="label-ok">Alex → Owner (control)</text></g>
+      <g class="node ov" id="chip-datareader"><rect class="box-ok" x="600" y="152" width="270" height="26" rx="6"/><text x="735" y="169" text-anchor="middle" class="label-ok">Alex → Storage Blob Data Reader</text></g>
+      <text class="ov label-risk" id="mark-deny" x="735" y="208" text-anchor="middle">✗ read blob: DENIED</text>
+      <text class="ov label-ok" id="mark-ok" x="735" y="208" text-anchor="middle">✓ read blob: allowed</text>
+
+      <!-- callout strip: look-alike concepts, one at a time -->
+      <g class="ov" id="cal-entra"><rect class="box-risk" x="20" y="250" width="860" height="40" rx="7"/><text x="450" y="274" text-anchor="middle">Microsoft Entra directory roles (Global Admin…) — a SEPARATE system · a Global Admin has NO Azure access by default</text></g>
+      <g class="ov" id="cal-deny"><rect class="box-risk" x="20" y="250" width="860" height="40" rx="7"/><text x="450" y="274" text-anchor="middle" class="label-risk">Deny assignment on the resource group → overrides Owner + data role → ✗ Alex is blocked</text></g>
+      <g class="ov" id="cal-classic"><rect class="box" x="20" y="250" width="860" height="40" rx="7"/><text x="450" y="274" text-anchor="middle">Classic admins: Account / Service / Co-Administrator (Co-admin ≈ Owner at the subscription) — legacy, being retired</text></g>
+      <g class="ov" id="cal-pim"><rect class="box-accent" x="20" y="250" width="860" height="40" rx="7"/><text x="450" y="274" text-anchor="middle" class="label-accent">PIM (Entra ID P2): Owner can be ELIGIBLE — Alex must ACTIVATE it (time-bound) before it actually works</text></g>
+    </svg>
+  </div>
+
+  <div class="panel" id="panel"></div>
+
+  <div class="controls">
+    <button id="prev">← Prev</button>
+    <div class="dots" id="dots"></div>
+    <span class="count" id="count"></span>
+    <button id="next" class="primary">Next →</button>
+  </div>
+
+  <p class="note">Interactive study page · self-contained, works offline (file://), follows light/dark · keyboard ← / →. Grounded in the D1.2.1 objective page.</p>
+</div>
+
+<script>
+var STEPS = [
+  { t:"The goal", spot:["alex","s-sa"], vis:[],
+    h:"<p><span class='t-term'>Alex</span> is a user. She must <span class='t-ok'>read a blob</span> in the storage account <code>sa-files</code>. Follow one request all the way through — every concept about roles and permissions shows up on this one thread, including the things that get confused with a role.</p>" },
+
+  { t:"A role only works through an assignment", spot:["alex","s-sa","plane-control","plane-data"], vis:[],
+    h:"<p>A <span class='t-term'>role</span> is just a named <b>set of permissions</b>. Access happens only through a <span class='t-term'>role assignment</span> = <b>principal</b> + <b>role</b> + <b>scope</b>.</p><p>The <b>principal</b> can be a <b>user</b>, a <b>group</b> (members inherit it — transitive, including nested groups), a <b>service principal</b> (an app), or a <b>managed identity</b>. Miss any of the three parts → no access.</p>" },
+
+  { t:"Scope = where it applies (inherits down)", spot:["s-mg","s-sub","s-rg","s-sa","s-blob","inh"], vis:[],
+    h:"<p>You assign at a <span class='t-term'>scope</span>: management group → subscription → resource group → resource → data container. It <b>inherits downward</b>; a child <span class='t-risk'>cannot opt out</span>.</p><p>The same ladder is where other governance attaches — a <b>role</b>, an <b>Azure Policy</b>, a <b>lock</b> — but only <b>roles</b> grant permissions. We'll assign Alex at the <b>storage account</b>.</p>" },
+
+  { t:"Give Alex Owner — the control plane", spot:["plane-control","chip-owner"], vis:["chip-owner"],
+    h:"<p>Assign <span class='t-term'>Owner</span> at <code>sa-files</code>. Owner is a <b>control-plane</b> role — its permissions are <code>Actions</code>: create, delete, configure the account. Alex can now fully <b>manage</b> <code>sa-files</code>.</p>" },
+
+  { t:"Alex reads a blob → DENIED", spot:["plane-data"], vis:["chip-owner","mark-deny"],
+    h:"<p>Alex opens a blob to <b>read</b> it → <span class='t-risk'>denied</span>. Why?</p><p><span class='t-risk'>Control plane ≠ data plane.</span> Owner's <code>Actions = *</code> covers <i>managing</i> the resource, <b>not</b> the data inside. Reading a blob needs <code>DataActions</code>, which Owner does not have. <b>The single most-tested RBAC idea.</b></p>" },
+
+  { t:"Two ways to fix it", spot:["plane-data"], vis:["chip-owner","mark-deny"],
+    h:"<ul><li><b>(a) A data-plane role</b> — e.g. <span class='t-ok'>Storage Blob Data Reader</span> (read), …Contributor (read+write), …Owner.</li><li><b>(b) The storage account access key</b> — only if <b>Shared Key</b> access is enabled.</li></ul><p>Least-privilege answer: the <b>data role</b>, not the key.</p>" },
+
+  { t:"Additive model — manage AND read", spot:["plane-control","plane-data","chip-owner","chip-datareader"], vis:["chip-owner","chip-datareader","mark-ok"],
+    h:"<p>Assign <span class='t-ok'>Storage Blob Data Reader</span> as well. Azure RBAC is <b>additive</b>: Alex now holds <b>Owner (control) + Storage Blob Data Reader (data)</b> → she can <b>manage the account</b> <i>and</i> <span class='t-ok'>read blobs</span>. Nothing was removed; permissions <b>sum</b>.</p>" },
+
+  { t:"Under the hood: a role is an equation", spot:["plane-control","plane-data"], vis:["chip-owner","chip-datareader","mark-ok"],
+    h:"<p>Computed <b>per plane</b>:</p><p style='text-align:center'><code>Actions − NotActions</code> = effective control &nbsp;·&nbsp; <code>DataActions − NotDataActions</code> = effective data</p><p><span class='t-risk'>NotActions is not a deny.</span> It only subtracts from <i>that</i> role's wildcard — another assignment can grant the action back.</p>" },
+
+  { t:"Built-in vs custom", spot:[], vis:["chip-owner","chip-datareader","mark-ok"],
+    h:"<p>Alex used <b>built-in</b> roles: <code>AssignableScopes = \"/\"</code> → assignable at <b>any</b> scope, and there are <b>hundreds</b> — recognize them, don't memorize. Need something in between the big ones? A <span class='t-term'>custom role</span> lists its <b>own</b> AssignableScopes; a tenant allows up to <b>5,000</b>.</p>" },
+
+  { t:"Look-alike #1 — Entra roles are a different system", spot:["alex"], vis:["chip-owner","chip-datareader","mark-ok","cal-entra"],
+    h:"<p>Plot twist: Alex is <i>also</i> a <b>Global Administrator</b> in Microsoft Entra. Does that give her Azure access? <span class='t-risk'>No.</span></p><p><b>Azure RBAC and Microsoft Entra roles are two separate systems.</b> Entra roles (Global Admin, User Administrator…) govern the <b>directory</b> — users, groups, licenses. Azure roles govern <b>resources</b>. Neither leaks into the other. A Global Admin <i>can</i> elevate to User Access Administrator at the root to bootstrap Azure access — a deliberate switch, not automatic.</p>" },
+
+  { t:"Look-alike #2 — a deny assignment is not a role", spot:["alex"], vis:["chip-owner","chip-datareader","mark-deny","cal-deny"],
+    h:"<p>An admin adds a <span class='t-risk'>deny assignment</span> on the resource group. Alex still has Owner + the data role — but she's <span class='t-risk'>blocked</span>.</p><p><b>Role assignments only grant; a deny assignment blocks and overrides every allow.</b> It's a different object (used by Blueprints, managed apps, the system), not something you usually hand-create — but it wins over any role.</p>" },
+
+  { t:"Look-alike #3 — classic administrators", spot:[], vis:["chip-owner","chip-datareader","mark-ok","cal-classic"],
+    h:"<p>Before RBAC there were <b>classic subscription administrators</b>: <b>Account Administrator</b> (the billing owner), <b>Service Administrator</b>, and <b>Co-Administrators</b> (a Co-admin ≈ <b>Owner</b> at the subscription). They still exist on older subscriptions and are being retired. Recognize them — but prefer an RBAC <b>Owner</b> assignment over adding a Co-admin.</p>" },
+
+  { t:"Look-alike #4 — assigned vs active (PIM)", spot:[], vis:["chip-owner","chip-datareader","mark-ok","cal-pim"],
+    h:"<p>Alex's Owner might be <b>eligible</b>, not active. With <span class='t-term'>Privileged Identity Management (PIM — Entra ID P2)</span> a role is made <b>eligible</b>; the person must <b>activate</b> it (time-bound, often MFA + approval + justification) to actually use it.</p><p><b>\"Assigned the role\" ≠ \"has it active right now.\"</b> Active assignment = always on; eligible = just-in-time.</p>" },
+
+  { t:"The traps, in one place", spot:[], vis:["chip-owner","chip-datareader","mark-ok"],
+    h:"<ul><li><b>Owner ≠ data access</b> (step 5).</li><li><b>Contributor can't assign roles</b> — its <code>NotActions</code> strips <code>Microsoft.Authorization/*/Write</code>. Owner's only extra power is delegation.</li><li><b>User Access Administrator</b> = manage <b>access only</b>, not resources. <b>RBAC Administrator</b> can assign roles but <span class='t-risk'>not deny assignments</span>.</li><li><span class='t-risk'>RBAC ≠ Entra</span> (step 10); <code>NotActions</code> ≠ deny (real deny = a deny assignment, step 11).</li><li><b>Also exist, rarely deep on AZ-104:</b> role-assignment <b>conditions</b> (ABAC — an extra \"only if tag=…\" filter) and <b>access reviews</b> (periodic re-certification, P2).</li></ul>" },
+
+  { t:"Where to see & inspect it", spot:[], vis:["chip-owner","chip-datareader","mark-ok"],
+    h:"<ul><li><b>Portal:</b> any scope → <b>Access control (IAM) → Roles</b>.</li><li><b>CLI:</b> <code>az role definition list --name \"Owner\"</code></li><li><b>PowerShell:</b> <code>Get-AzRoleDefinition \"Owner\" | ConvertTo-Json</code></li></ul><p class='muted'>Built-in roles have a <b>stable GUID</b> identical across every tenant (Reader = <code>acdd72a7-3385-48ef-bd42-f606fba81ae7</code>) — reference roles by ID in scripts, not display name. Built-in JSON is read-only in the portal; Clone to base a custom role on it.</p>" }
+];
+
+var OVERLAYS = ["chip-owner","chip-datareader","mark-deny","mark-ok","cal-entra","cal-deny","cal-classic","cal-pim"];
+var TRAP_STEPS = [4,9,10,13];
+var i = 0;
+var panel=document.getElementById('panel'), dotsEl=document.getElementById('dots'),
+    countEl=document.getElementById('count'), prevB=document.getElementById('prev'), nextB=document.getElementById('next');
+
+STEPS.forEach(function(s,idx){
+  var d=document.createElement('button'); d.className='dot'+(TRAP_STEPS.indexOf(idx)>=0?' trap':'');
+  d.title=(idx+1)+'. '+s.t; d.onclick=function(){ i=idx; render(); };
+  dotsEl.appendChild(d);
+});
+
+function render(){
+  var s=STEPS[i];
+  panel.innerHTML="<h2><span class='n'>"+(i+1)+"</span>"+s.t+"</h2>"+s.h;
+  document.querySelectorAll('.stage .node').forEach(function(n){
+    var on=s.spot.indexOf(n.id)>=0;
+    n.classList.toggle('on',on);
+    n.classList.toggle('dim', s.spot.length>0 && !on && OVERLAYS.indexOf(n.id)<0);
+  });
+  OVERLAYS.forEach(function(id){ document.getElementById(id).classList.toggle('show', s.vis.indexOf(id)>=0); });
+  dotsEl.querySelectorAll('.dot').forEach(function(d,idx){ d.classList.toggle('active', idx===i); });
+  countEl.textContent=(i+1)+" / "+STEPS.length;
+  prevB.disabled=(i===0); nextB.disabled=(i===STEPS.length-1);
+}
+prevB.onclick=function(){ if(i>0){i--;render();} };
+nextB.onclick=function(){ if(i<STEPS.length-1){i++;render();} };
+document.addEventListener('keydown',function(e){
+  if(e.key==='ArrowRight'){nextB.click();} else if(e.key==='ArrowLeft'){prevB.click();}
+});
+document.getElementById('theme').onclick=function(){
+  var r=document.documentElement, next=(r.dataset.theme==='dark')?'light':'dark';
+  r.dataset.theme=next; try{ localStorage.setItem('az104-theme',next); }catch(e){}
+};
+render();
+</script>
+<script src="../notes.js"></script>
+</body>
+</html>

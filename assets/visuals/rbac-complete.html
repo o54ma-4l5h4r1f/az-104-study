@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Azure access &amp; authorization — complete reference view</title>
+<script>(function(){try{var t=localStorage.getItem('az104-theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}})();</script>
+<style>
+:root{
+  --bg:#faf9f7;--surface:#fff;--surface-2:#f1efec;--ink:#1b1a18;--ink-2:#56524c;--ink-3:#8a8479;
+  --line:#e0dcd5;--accent:#0d6a63;--accent-ink:#ffffff;--accent-soft:#e2f0ee;--risk:#a4451a;--risk-soft:#f9e8e0;
+  --ok:#2c6e3f;--ok-soft:#e2f0e6;--known:#4a5a70;--known-soft:#e7ecf3;--code-bg:#f4f2ef;--radius:10px;
+  --shadow:0 1px 2px rgba(0,0,0,.05),0 4px 14px rgba(0,0,0,.04);
+}
+:root[data-theme="dark"]{
+  --bg:#15171a;--surface:#1c1f23;--surface-2:#23272c;--ink:#e6e3de;--ink-2:#a8a49d;--ink-3:#726d66;
+  --line:#2e3338;--accent:#4fbfb4;--accent-ink:#10201f;--accent-soft:#16302e;--risk:#e08a5c;--risk-soft:#33231b;
+  --ok:#6dbb85;--ok-soft:#17271c;--known:#93a8c4;--known-soft:#1e262f;--code-bg:#191c20;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 4px 14px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.45;font-size:14px}
+.wrap{max-width:1280px;margin:0 auto;padding:18px 16px 60px}
+.top{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:var(--accent);color:var(--accent-ink);
+  border-radius:var(--radius);padding:14px 18px;margin-bottom:12px;box-shadow:var(--shadow)}
+.top h1{font-size:1.18rem;margin:0;flex:1;min-width:240px}
+.top .sub{opacity:.9;font-size:13px}
+.top button{font:inherit;padding:6px 12px;border:1px solid currentColor;background:transparent;color:var(--accent-ink);border-radius:6px;cursor:pointer}
+.band{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin:16px 2px 2px}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:13px 15px;box-shadow:var(--shadow)}
+.card h2{margin:0 0 8px;font-size:.97rem;display:flex;align-items:center;gap:8px}
+.card h2 .ic{width:21px;height:21px;flex:none;display:inline-grid;place-items:center;border-radius:6px;background:var(--accent-soft);color:var(--accent);font-size:12px;font-weight:700}
+.col-3{grid-column:span 3}.col-4{grid-column:span 4}.col-5{grid-column:span 5}.col-6{grid-column:span 6}.col-7{grid-column:span 7}.col-8{grid-column:span 8}.col-12{grid-column:span 12}
+@media(max-width:1000px){.col-3,.col-4,.col-5,.col-6,.col-7,.col-8{grid-column:span 12}}
+p{margin:5px 0}ul{margin:5px 0;padding-left:17px}li{margin:3px 0}ol{margin:5px 0;padding-left:19px}
+code{background:var(--code-bg);padding:1px 5px;border-radius:4px;font-size:.86em}
+.k{color:var(--accent);font-weight:600}
+table{border-collapse:collapse;width:100%;font-size:12px;margin-top:3px}
+th,td{border:1px solid var(--line);padding:4px 7px;text-align:left;vertical-align:top}
+th{background:var(--surface-2);font-weight:600}
+.yes{color:var(--ok);font-weight:700}.no{color:var(--risk);font-weight:700}
+.plane-c{background:var(--accent-soft);color:var(--accent);border-radius:5px;padding:0 6px;font-size:11px;font-weight:600;white-space:nowrap}
+.plane-d{background:var(--ok-soft);color:var(--ok);border-radius:5px;padding:0 6px;font-size:11px;font-weight:600;white-space:nowrap}
+.num{font-weight:700;color:var(--accent)}
+.numrow{display:flex;justify-content:space-between;gap:8px;padding:4px 0;border-bottom:1px solid var(--line)}
+.numrow:last-child{border-bottom:none}.numrow .lbl{font-size:12px;color:var(--ink-2)}.numrow .v{font-weight:700;white-space:nowrap}
+.callout{border-left:4px solid var(--risk);background:var(--risk-soft);border-radius:6px;padding:7px 11px;margin-top:7px}
+.callout.ok{border-left-color:var(--ok);background:var(--ok-soft)}
+.callout.n{border-left-color:var(--known);background:var(--known-soft)}
+.eq{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin:5px 0;font-size:12.5px}
+.eq .b{border:1px solid var(--line);border-radius:6px;padding:3px 8px;background:var(--surface-2)}
+.eq .minus{background:var(--risk-soft);border-color:var(--risk);color:var(--risk)}
+.eq .res{background:var(--ok-soft);border-color:var(--ok);color:var(--ok)}
+svg{display:block;width:100%;height:auto;color:var(--ink)}
+svg text{fill:var(--ink);font-size:12px;font-family:inherit}
+svg .muted{fill:var(--ink-3)}
+svg .box{fill:var(--surface-2);stroke:var(--line);stroke-width:1.5}
+svg .box-accent{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.5}
+svg .line{stroke:var(--ink-3);stroke-width:1.5;fill:none}
+svg .label-accent{fill:var(--accent);font-weight:600}
+.foot{font-size:11.5px;color:var(--ink-3);margin-top:8px}
+.foot a{color:var(--accent)}
+@media print{.top button{display:none}body{font-size:10.5px}.card{break-inside:avoid;box-shadow:none}@page{margin:8mm}}
+/* page annotations (notes.js) */
+body.az-adding,body.az-adding *{cursor:crosshair}
+.az-fab{position:fixed;right:18px;bottom:18px;z-index:9000;display:flex;align-items:center;gap:8px}
+.az-fab-main{position:relative;width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-size:20px;cursor:pointer;box-shadow:var(--shadow)}
+.az-fab-main:hover{border-color:var(--accent)}.az-fab-main.az-active{background:var(--accent);border-color:var(--accent)}
+.az-fab-count{position:absolute;top:-4px;right:-4px;min-width:18px;height:18px;padding:0 4px;border-radius:10px;background:var(--risk);color:#fff;font-size:11px;line-height:18px}
+.az-fab-count:empty{display:none}.az-fab-menu{display:flex;gap:6px}
+.az-fab-menu button,.az-fab-menu label{width:34px;height:34px;display:grid;place-items:center;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-size:15px;cursor:pointer;box-shadow:var(--shadow)}
+.az-fab-menu button:hover,.az-fab-menu label:hover{border-color:var(--accent)}
+.az-pin{position:absolute;z-index:8500;transform:translate(-50%,-50%);width:26px;height:26px;padding:0;border:1px solid var(--accent);border-radius:50% 50% 50% 2px;background:var(--accent-soft);font-size:14px;line-height:1;cursor:pointer;box-shadow:var(--shadow)}
+.az-pin:hover{outline:2px solid var(--accent)}.az-pin.az-empty{opacity:.6;border-style:dashed}
+.az-pop{position:absolute;z-index:9100;width:290px;background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);padding:10px}
+.az-pop textarea{width:100%;min-height:90px;resize:vertical;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font:inherit;font-size:14px;padding:8px}
+.az-pop-row{display:flex;align-items:center;margin-top:8px}.az-pop-row .az-spacer{flex:1}
+.az-pop-row button{font:inherit;padding:5px 12px;border-radius:6px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.az-pop-row .az-save{background:var(--accent);border-color:var(--accent);color:#fff}.az-pop-row .az-del{color:var(--risk);border-color:var(--risk-soft)}
+@media print{.az-fab,.az-pop{display:none!important}.az-pin{box-shadow:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <h1>Azure access &amp; authorization — complete reference <span class="sub">· RBAC · Entra roles · service access models · identities · the other gates</span></h1>
+    <button onclick="var r=document.documentElement,n=(r.dataset.theme==='dark')?'light':'dark';r.dataset.theme=n;try{localStorage.setItem('az104-theme',n)}catch(e){}">Light / dark</button>
+  </div>
+
+  <div class="band">1 · Azure RBAC core</div>
+  <div class="grid">
+    <div class="card col-4">
+      <h2><span class="ic">◈</span>Key terms</h2>
+      <ul>
+        <li><span class="k">Azure RBAC</span> — authorization built on Azure Resource Manager; fine-grained access to Azure <b>resources</b>.</li>
+        <li><span class="k">Role assignment</span> = <b>security principal</b> + <b>role</b> + <b>scope</b>. Grant = create it; revoke = delete it.</li>
+        <li><span class="k">Security principal</span> — user, <b>group</b> (transitive), service principal, or managed identity.</li>
+        <li><span class="k">Permission types</span> — <code>Actions</code> → control plane · <code>DataActions</code> → data plane.</li>
+      </ul>
+    </div>
+    <div class="card col-4">
+      <h2><span class="ic">⚙</span>Two permission planes</h2>
+      <p><span class="plane-c">Control plane · Actions</span><br>Manage the resource — create / delete / configure. Via <b>ARM</b> (<code>management.azure.com</code>).</p>
+      <p><span class="plane-d">Data plane · DataActions</span><br>Touch the data inside — read a blob, read a secret. Via the resource's <b>own endpoint</b>.</p>
+      <div class="callout">Control-plane <code>*</code> does <b>NOT</b> grant data access. (Same split as a router: control plane vs forwarding plane.)</div>
+    </div>
+    <div class="card col-4">
+      <h2><span class="ic">?</span>Can an Owner read the blobs?</h2>
+      <p><span class="no">No — by default.</span> Owner manages the account (control) but can't read blobs (data) unless they also hold a <b>data role</b> (Storage Blob Data Reader) <b>or</b> the <b>access key</b> (if Shared Key enabled).</p>
+      <p class="foot">Most-tested RBAC idea. Same shape for VMs (manage ≠ OS login) and Key Vault (manage vault ≠ read secret).</p>
+    </div>
+
+    <div class="card col-5">
+      <h2><span class="ic">⤵</span>Scope, inheritance &amp; who can assign</h2>
+      <svg viewBox="0 0 460 206" role="img" aria-label="Scope hierarchy from management group down to a data container; a role at a scope applies to everything under it">
+        <defs><marker id="a" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" class="muted"/></marker></defs>
+        <rect class="box-accent" x="10" y="6" width="205" height="28" rx="6"/><text x="112" y="24" text-anchor="middle" class="label-accent">Management group</text>
+        <text x="230" y="24" class="muted">→ all under it</text>
+        <rect class="box" x="10" y="44" width="205" height="28" rx="6"/><text x="112" y="62" text-anchor="middle">Subscription</text>
+        <text x="230" y="62" class="muted">→ everything in the sub</text>
+        <rect class="box" x="10" y="82" width="205" height="28" rx="6"/><text x="112" y="100" text-anchor="middle">Resource group</text>
+        <text x="230" y="100" class="muted">→ all resources in the RG</text>
+        <rect class="box" x="10" y="120" width="205" height="28" rx="6"/><text x="112" y="138" text-anchor="middle">Resource</text>
+        <text x="230" y="138" class="muted">→ that one resource</text>
+        <rect class="box" x="10" y="158" width="205" height="28" rx="6"/><text x="112" y="176" text-anchor="middle">Data container (blob/queue)</text>
+        <text x="230" y="176" class="muted">→ data roles only</text>
+        <line class="line" x1="112" y1="34" x2="112" y2="44" marker-end="url(#a)"/>
+        <line class="line" x1="112" y1="72" x2="112" y2="82" marker-end="url(#a)"/>
+        <line class="line" x1="112" y1="110" x2="112" y2="120" marker-end="url(#a)"/>
+        <line class="line" x1="112" y1="148" x2="112" y2="158" marker-end="url(#a)"/>
+      </svg>
+      <div class="callout n"><b>Who can assign?</b> Needs <code>Microsoft.Authorization/roleAssignments/write</code> → <b>Owner</b>, <b>User Access Administrator</b>, or <b>RBAC Administrator</b>. <span class="no">Contributor cannot.</span></div>
+    </div>
+    <div class="card col-7">
+      <h2><span class="ic">∑</span>Role = equation · how access is evaluated</h2>
+      <div class="eq"><span class="b">Actions</span><span class="minus">− NotActions</span><span class="res">= control</span><span class="b">DataActions</span><span class="minus">− NotDataActions</span><span class="res">= data</span></div>
+      <p class="foot"><code>NotActions</code> is <b>not a deny</b>; another assignment can grant it back. RBAC is <b>additive</b> — effective = sum of all assignments.</p>
+      <p style="margin-top:6px"><b>Evaluation order</b> (ARM):</p>
+      <ol>
+        <li>Token (incl. <b>transitive group</b> memberships).</li>
+        <li>Gather role + deny assignments for the resource.</li>
+        <li><span class="no">Deny assignment applies? → blocked</span> (first).</li>
+        <li>Else: is the action in <code>Actions − NotActions</code> (or data)?</li>
+        <li>If yes: <b>conditions (ABAC)</b> evaluated last → allow/deny.</li>
+      </ol>
+      <p class="foot">Role definitions, assignments &amp; deny assignments are stored <b>globally</b>.</p>
+    </div>
+
+    <div class="card col-12">
+      <h2><span class="ic">▤</span>Common roles — what each can do (storage example)</h2>
+      <table>
+        <tr><th>Role</th><th>Plane</th><th>Manage account</th><th>Read blobs</th><th>Upload/delete blobs</th><th>Assign roles</th><th>Notes</th></tr>
+        <tr><td><b>Owner</b></td><td><span class="plane-c">Control</span></td><td class="yes">✓</td><td class="no">✗*</td><td class="no">✗*</td><td class="yes">✓</td><td>Full control + delegation</td></tr>
+        <tr><td><b>Contributor</b></td><td><span class="plane-c">Control</span></td><td class="yes">✓</td><td class="no">✗*</td><td class="no">✗*</td><td class="no">✗</td><td><code>*</code> minus <code>Authorization/*/Write</code></td></tr>
+        <tr><td><b>Reader</b></td><td><span class="plane-c">Control</span></td><td>view only</td><td class="no">✗</td><td class="no">✗</td><td class="no">✗</td><td>Read-only in scope</td></tr>
+        <tr><td><b>User Access Administrator</b></td><td><span class="plane-c">Control</span></td><td class="no">✗</td><td class="no">✗</td><td class="no">✗</td><td class="yes">✓</td><td>Access only — incl. <b>deny</b> assignments</td></tr>
+        <tr><td><b>RBAC Administrator</b></td><td><span class="plane-c">Control</span></td><td class="no">✗</td><td class="no">✗</td><td class="no">✗</td><td class="yes">✓</td><td>Assign roles, <span class="no">not deny assignments</span></td></tr>
+        <tr><td><b>Storage Blob Data Reader</b></td><td><span class="plane-d">Data</span></td><td class="no">✗</td><td class="yes">✓</td><td class="no">✗</td><td class="no">✗</td><td>Read blobs only</td></tr>
+        <tr><td><b>Storage Blob Data Contributor</b></td><td><span class="plane-d">Data</span></td><td class="no">✗</td><td class="yes">✓</td><td class="yes">✓</td><td class="no">✗</td><td>Read + write + delete</td></tr>
+        <tr><td><b>Storage Blob Data Owner</b></td><td><span class="plane-d">Data</span></td><td class="no">✗</td><td class="yes">✓</td><td class="yes">✓</td><td class="no">✗</td><td>Full data incl. POSIX ACLs</td></tr>
+      </table>
+      <p class="foot">* Owner/Contributor don't get blob data access via Entra ID by default — add a <code>Storage Blob Data *</code> role or use the access key. RBAC is additive: Owner + Data Reader = manage <i>and</i> read.</p>
+    </div>
+  </div>
+
+  <div class="band">2 · Azure RBAC roles vs Microsoft Entra roles</div>
+  <div class="grid">
+    <div class="card col-7">
+      <h2><span class="ic">⇄</span>Two separate role systems</h2>
+      <table>
+        <tr><th></th><th>Azure RBAC role</th><th>Microsoft Entra role</th></tr>
+        <tr><td>Governs</td><td>Azure <b>resources</b> (VM, storage…)</td><td>the <b>directory</b> + M365 (users, groups, apps)</td></tr>
+        <tr><td>Scope</td><td>MG / sub / RG / resource</td><td>tenant / administrative unit / single object</td></tr>
+        <tr><td>Managed in</td><td><b>Access control (IAM)</b>, az, ARM, REST</td><td><b>Entra ID → Roles &amp; administrators</b>, Graph</td></tr>
+        <tr><td>Action namespace</td><td><code>Microsoft.Storage/…/read</code></td><td><code>microsoft.directory/users/…</code></td></tr>
+        <tr><td>Count</td><td>100s of built-in</td><td>~60 built-in</td></tr>
+      </table>
+      <p class="foot"><b>Don't overlap by default.</b> A <b>Global Administrator (Entra) is NOT</b> an Owner in Azure — until they <b>elevate access</b> (Entra ID → Properties) → granted <b>User Access Administrator</b> on all subscriptions at the root. Both systems integrate with <b>PIM</b>.</p>
+      <div class="callout"><b>Name traps:</b> Azure <b>Owner</b> ≠ Entra <b>Global Administrator</b> · Azure <b>User Access Administrator</b> ≠ Entra <b>User Administrator</b>. Rule: "service + Reader/Contributor/Owner" = Azure RBAC; plain "X Administrator" over the tenant = Entra role.</div>
+    </div>
+    <div class="card col-5">
+      <h2><span class="ic">≈</span>Other "role"-adjacent concepts</h2>
+      <table>
+        <tr><th>Concept</th><th>What it is</th></tr>
+        <tr><td><b>Deny assignment</b></td><td>Blocks actions; overrides allows; Azure-managed (see band 4)</td></tr>
+        <tr><td><b>Classic admin</b></td><td>Account / Service / Co-admin — <span class="no">retired</span> (Co-admin → Owner auto-assigned; fully gone May 2026)</td></tr>
+        <tr><td><b>PIM eligible</b></td><td>Just-in-time role — must <b>activate</b> (time-bound, approval, P2)</td></tr>
+        <tr><td><b>Access review</b></td><td>Periodic re-certification of who has access (P2)</td></tr>
+        <tr><td><b>Conditional Access</b></td><td>Controls <b>sign-in</b> (device/location/MFA), not resource perms (P1)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="band">3 · Service access models — each resource adds its own</div>
+  <div class="grid">
+    <div class="card col-6">
+      <h2><span class="ic">🔑</span>Key Vault — two authorization models</h2>
+      <p><b>Two planes</b>, controlled independently:</p>
+      <ul>
+        <li><span class="plane-c">Control plane</span> — manage the vault (create, network, properties) → <b>Azure RBAC</b> (e.g. <b>Key Vault Contributor</b>).</li>
+        <li><span class="plane-d">Data plane</span> — keys / secrets / certificates → pick <b>one model per vault</b>:</li>
+      </ul>
+      <table>
+        <tr><th></th><th>Azure RBAC (recommended)</th><th>Access policy (legacy)</th></tr>
+        <tr><td>Where</td><td>control + data plane</td><td>data plane only, native to KV</td></tr>
+        <tr><td>Grant control</td><td>Owner / UAA only</td><td><span class="no">any Contributor can self-grant</span></td></tr>
+        <tr><td>PIM / deny</td><td class="yes">✓</td><td class="no">✗</td></tr>
+        <tr><td>Scale</td><td>built-in data roles</td><td>≤ 1024 entries/vault</td></tr>
+      </table>
+      <p class="foot">RBAC data roles: Key Vault Administrator, Secrets User/Officer, Crypto User/Officer, Certificates Officer. RBAC is the <b>default for new vaults</b> (API 2026-02-01+). <b>Key Vault Contributor manages the vault but can't read secrets.</b></p>
+    </div>
+    <div class="card col-6">
+      <h2><span class="ic">🗄</span>Storage — ways to authorize data</h2>
+      <ul>
+        <li><b>Microsoft Entra ID</b> (Azure RBAC + ABAC) — recommended, use a <b>managed identity</b>. Blob / queue / table.</li>
+        <li><b>Shared Key</b> — the <b>account key</b>; full access to everything; <span class="no">can be disabled</span> (then only Entra / user-delegation SAS).</li>
+        <li><b>SAS</b> — a signed URL granting limited, time-boxed access.</li>
+        <li><b>Anonymous public access</b> — blob only; can be disabled.</li>
+      </ul>
+      <table>
+        <tr><th>SAS type</th><th>Signed with</th><th>Scope</th></tr>
+        <tr><td><b>User delegation</b> ★</td><td><b>Entra</b> creds (user delegation key)</td><td>blob/queue/table/files</td></tr>
+        <tr><td>Service SAS</td><td>account key</td><td>one service</td></tr>
+        <tr><td>Account SAS</td><td>account key</td><td>one+ services, + service ops</td></tr>
+      </table>
+      <p class="foot">★ User delegation SAS is the secure one (Entra-backed, revocable). Creating it needs the RBAC action <code>…/generateUserDelegationKey</code>.</p>
+    </div>
+  </div>
+
+  <div class="band">4 · Identities &amp; the other gates</div>
+  <div class="grid">
+    <div class="card col-5">
+      <h2><span class="ic">◍</span>Identities that receive access</h2>
+      <p>Any of these can hold a role assignment:</p>
+      <ul>
+        <li><b>User</b> · <b>Group</b> (role is transitive to members, incl. nested) · <b>Service principal</b> (an app) · <b>Managed identity</b>.</li>
+      </ul>
+      <table>
+        <tr><th>Managed identity</th><th>System-assigned</th><th>User-assigned</th></tr>
+        <tr><td>Created</td><td>on a resource (VM, App Service)</td><td>standalone resource</td></tr>
+        <tr><td>Lifecycle</td><td>tied to resource — auto-deleted</td><td>independent — delete yourself</td></tr>
+        <tr><td>Shared</td><td class="no">1 resource only</td><td class="yes">many resources</td></tr>
+      </table>
+      <p class="foot">Both are a special <b>service principal</b> — no credentials to manage. An <b>app</b> service principal is manual and uses a secret/cert. All get RBAC via normal role assignments.</p>
+    </div>
+    <div class="card col-4">
+      <h2><span class="ic">⊘</span>Deny assignment ≠ role</h2>
+      <table>
+        <tr><th>Capability</th><th>Role</th><th>Deny</th></tr>
+        <tr><td>Grant</td><td class="yes">✓</td><td></td></tr>
+        <tr><td>Deny</td><td></td><td class="no">✓</td></tr>
+        <tr><td>Create directly</td><td class="yes">✓</td><td class="no">✗</td></tr>
+        <tr><td>Exclude principals</td><td></td><td>✓</td></tr>
+        <tr><td>Applies to classic admins</td><td></td><td>✓</td></tr>
+      </table>
+      <p class="foot"><b>Azure-managed</b> — you can't hand-create them. Made by <b>Deployment Stacks</b> deny settings (and legacy <b>Blueprints</b>, retiring 2027-01-31). Checked <b>before</b> roles; overrides every allow. Max 2,000 system deny assignments/sub.</p>
+    </div>
+    <div class="card col-3">
+      <h2><span class="ic">≣</span>ABAC + limits</h2>
+      <p><b>ABAC condition</b> — optional extra check on a role assignment (e.g. read blobs only if tag <code>Project=X</code>). GA for Blob/ADLS/Queue data; <span class="no">can't deny</span>; works with PIM.</p>
+      <div class="numrow"><span class="lbl">Assignments / sub</span><span class="v">5,000</span></div>
+      <div class="numrow"><span class="lbl">Assignments / MG</span><span class="v">500</span></div>
+      <div class="numrow"><span class="lbl">Custom roles / tenant</span><span class="v">5,000</span></div>
+      <div class="numrow"><span class="lbl">Condition size</span><span class="v">8 KB</span></div>
+    </div>
+
+    <div class="card col-5">
+      <h2><span class="ic">⛔</span>Other gates that can block you (even with the role)</h2>
+      <ul>
+        <li><b>Deny assignment</b> — overrides any allow (above).</li>
+        <li><b>Azure Policy</b> (<code>Deny</code> effect) — blocks non-compliant resources; separate from RBAC.</li>
+        <li><b>Resource lock</b> — <code>CanNotDelete</code> / <code>ReadOnly</code> blocks even an <b>Owner</b>.</li>
+        <li><b>Network rules / firewall / private endpoint</b> — you're authorized but the request can't reach the data.</li>
+        <li><b>Conditional Access</b> — may block the sign-in before RBAC is even checked.</li>
+      </ul>
+    </div>
+    <div class="card col-4">
+      <h2><span class="ic">⌁</span>Built-in vs custom roles</h2>
+      <table>
+        <tr><th></th><th>Built-in</th><th>Custom</th></tr>
+        <tr><td>AssignableScopes</td><td><code>"/"</code> any scope</td><td>own; <span class="no">not <code>"/"</code>, no wildcard</span></td></tr>
+        <tr><td>Count</td><td>hundreds</td><td>≤ 5,000/tenant</td></tr>
+        <tr><td>Portal edit</td><td><span class="no">read-only</span> (Clone)</td><td>editable</td></tr>
+        <tr><td>GUID</td><td>stable, every tenant</td><td>tenant-specific</td></tr>
+      </table>
+      <p class="foot">Custom role: 1 management group max in scopes; a custom role with <code>DataActions</code> can't be assigned at MG scope.</p>
+    </div>
+    <div class="card col-3">
+      <h2><span class="ic">⧉</span>Services with their own RBAC</h2>
+      <p>Separate role systems (own data store + decision point):</p>
+      <ul>
+        <li>Microsoft <b>Entra ID</b>, Exchange, Intune, Defender, Compliance, Cost Management</li>
+        <li><b>Synapse</b> RBAC · <b>AKS</b> (Kubernetes RBAC) · <b>SQL</b> roles</li>
+      </ul>
+      <p class="foot">Azure RBAC ≠ any of these. Know that service-specific RBAC exists.</p>
+    </div>
+  </div>
+
+  <div class="band">5 · Traps &amp; where to inspect</div>
+  <div class="grid">
+    <div class="card col-12">
+      <h2><span class="ic">!</span>Exam traps &amp; where to look</h2>
+      <div class="grid" style="gap:10px">
+        <div class="col-7">
+          <ul>
+            <li>Control plane <b>≠</b> data plane (Owner can't read blobs / secrets; Contributor can't log into a VM).</li>
+            <li><b>Contributor</b> can't assign roles. <b>UAA</b> = access only. <b>RBAC Administrator</b> = assignments but <span class="no">not deny assignments</span>.</li>
+            <li><code>NotActions</code> ≠ deny — real deny = a <b>deny assignment</b> (evaluated first, overrides).</li>
+            <li><b>Azure RBAC ≠ Entra roles</b>; a Global Admin isn't an Azure Owner (must elevate).</li>
+            <li><b>Key Vault:</b> access-policy mode lets a Contributor self-grant data access → use the <b>RBAC</b> model.</li>
+            <li><b>Storage:</b> user delegation SAS (Entra) is secure; account/service SAS use the account key.</li>
+          </ul>
+        </div>
+        <div class="col-5">
+          <div class="callout ok">
+            <b>See it:</b> Portal → any scope → <b>Access control (IAM) → Roles</b>.<br>
+            <code>az role definition list --name "Owner"</code><br>
+            <code>Get-AzRoleDefinition "Owner" | ConvertTo-Json</code><br>
+            REST: <code>…/roleDefinitions?$filter=type+eq+'BuiltInRole'&amp;api-version=2022-04-01</code>
+          </div>
+          <p class="foot">Built-in JSON is read-only in the portal (Clone to base a custom role). Reference roles by their <b>stable GUID</b> in scripts (Reader = <code>acdd72a7-3385-48ef-bd42-f606fba81ae7</code>). Entra roles: <b>Entra ID → Roles &amp; administrators</b> / Microsoft Graph.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="foot">Static complete-view reference · themed, offline (file://), print with Ctrl/Cmd + P. Grounded in Microsoft Learn (verified 2026-11-10): RBAC overview / role-definitions / built-in-roles / custom-roles / deny-assignments / conditions-overview · rbac-and-directory-admin-roles · key-vault rbac-vs-access-policy &amp; rbac-guide · storage authorize-data-access &amp; storage-sas-overview · managed-identities overview · azure-subscription-service-limits.</p>
+</div>
+<script src="../notes.js"></script>
+</body>
+</html>

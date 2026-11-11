@@ -1,0 +1,549 @@
+# AZ-104 official Microsoft Learn training map.
+#
+# The join between the skills-measured outline (content/domains.toml) and the official training
+# curriculum. Each unit maps to the blueprint bullet(s) it serves. See CLAUDE.md "THE OFFICIAL
+# CURRICULUM" for why the mismatches matter.
+#
+# STATUS: Domain 1 captured 2026-11-01 (via the Microsoft Learn MCP, from the live
+# "AZ-104: Manage identities and governance in Azure" path and its 6 modules). Domains 2-5 are
+# module-less seeds for now (their bullets show uncovered until captured).
+#
+# NOTE on D1 coverage gaps (bullets with NO training unit -> write from product docs):
+#   D1.1.4 (external users), D1.3.2 (resource locks), D1.3.3 (tags), D1.3.6 (cost management).
+#   The official path leans on two Fundamentals modules (core architectural components, policy
+#   initiatives) rather than dedicated AZ-104 governance modules, so governance is thin on purpose.
+#
+# kind: intro | concept | exercise | assessment | summary   (only concept/exercise "teach")
+# `n` is this map's own contiguous 1..N index per module (build.py validates contiguity); the slug
+# keeps Microsoft's real unit slug even where their published numbering has gaps.
+# Set off_blueprint = true on a unit that teaches something the exam never asks for (Skip fuel).
+#
+# Regenerate/verify with:  python3 build.py --check-learn-map
+
+schema_version = 1
+captured = 2026-11-01
+unit_total = 51
+
+# ===========================================================================
+# PATHS
+# ===========================================================================
+
+[[paths]]
+id = "P1"
+domain = "D1"
+title = "Manage identities and governance in Azure"
+url = "https://learn.microsoft.com/training/paths/az-104-manage-identities-governance/"
+modules = 6
+
+[[paths]]
+id = "P2"
+domain = "D2"
+title = "Implement and manage storage in Azure"
+url = "https://learn.microsoft.com/training/paths/az-104-manage-storage/"
+modules = 0
+
+[[paths]]
+id = "P3"
+domain = "D3"
+title = "Deploy and manage Azure compute resources"
+url = "https://learn.microsoft.com/training/paths/az-104-manage-compute-resources/"
+modules = 0
+
+[[paths]]
+id = "P4"
+domain = "D4"
+title = "Configure and manage virtual networks for Azure administrators"
+url = "https://learn.microsoft.com/training/paths/az-104-manage-virtual-networks/"
+modules = 0
+
+[[paths]]
+id = "P5"
+domain = "D5"
+title = "Monitor and back up Azure resources"
+url = "https://learn.microsoft.com/training/paths/az-104-monitor-backup-resources/"
+modules = 0
+
+# ===========================================================================
+# MODULES  (Domain 1 path P1)
+# ===========================================================================
+
+[[modules]]
+slug = "understand-azure-active-directory"
+path = "P1"
+title = "Understand Microsoft Entra ID"
+url = "https://learn.microsoft.com/training/modules/understand-azure-active-directory/"
+unit_count = 8
+level = "Intermediate"
+
+[[modules]]
+slug = "create-configure-manage-identities"
+path = "P1"
+title = "Create, configure, and manage identities"
+url = "https://learn.microsoft.com/training/modules/create-configure-manage-identities/"
+unit_count = 14
+level = "Advanced"
+
+[[modules]]
+slug = "describe-core-architectural-components-of-azure"
+path = "P1"
+title = "Describe the core architectural components of Azure"
+url = "https://learn.microsoft.com/training/modules/describe-core-architectural-components-of-azure/"
+unit_count = 7
+level = "Beginner"
+
+[[modules]]
+slug = "sovereignty-policy-initiatives"
+path = "P1"
+title = "Azure Policy initiatives"
+url = "https://learn.microsoft.com/training/modules/sovereignty-policy-initiatives/"
+unit_count = 8
+level = "Advanced"
+
+[[modules]]
+slug = "secure-azure-resources-with-rbac"
+path = "P1"
+title = "Secure your Azure resources with Azure role-based access control (Azure RBAC)"
+url = "https://learn.microsoft.com/training/modules/secure-azure-resources-with-rbac/"
+unit_count = 8
+level = "Beginner"
+
+[[modules]]
+slug = "allow-users-reset-their-password"
+path = "P1"
+title = "Allow users to reset their password with Microsoft Entra self-service password reset"
+url = "https://learn.microsoft.com/training/modules/allow-users-reset-their-password/"
+unit_count = 6
+level = "Beginner"
+
+# ===========================================================================
+# UNITS
+# ===========================================================================
+
+# --- understand-azure-active-directory (8) ---
+
+[[units]]
+module = "understand-azure-active-directory"
+n = 1
+slug = "1-introduction"
+title = "Introduction"
+kind = "intro"
+objectives = []
+
+[[units]]
+module = "understand-azure-active-directory"
+n = 2
+slug = "2-examine-azure-active-directory"
+title = "Examine Microsoft Entra ID"
+kind = "concept"
+objectives = []
+off_blueprint = true
+
+[[units]]
+module = "understand-azure-active-directory"
+n = 3
+slug = "3-compare-azure-active-directory-domain-services"
+title = "Compare Microsoft Entra ID and Active Directory Domain Services"
+kind = "concept"
+objectives = []
+off_blueprint = true
+
+[[units]]
+module = "understand-azure-active-directory"
+n = 4
+slug = "4-examine-azure-directory-service-cloud-apps"
+title = "Examine Microsoft Entra ID as a directory service for cloud apps"
+kind = "concept"
+objectives = []
+off_blueprint = true
+
+[[units]]
+module = "understand-azure-active-directory"
+n = 5
+slug = "5-compare-azure-premium-p1-p2-plans"
+title = "Compare Microsoft Entra ID P1 and P2 plans"
+kind = "concept"
+objectives = ["D1.1.3"]
+
+[[units]]
+module = "understand-azure-active-directory"
+n = 6
+slug = "6-examine-azure-domain-services"
+title = "Examine Microsoft Entra Domain Services"
+kind = "concept"
+objectives = []
+off_blueprint = true
+
+[[units]]
+module = "understand-azure-active-directory"
+n = 7
+slug = "7-knowledge-check"
+title = "Module assessment"
+kind = "assessment"
+objectives = []
+
+[[units]]
+module = "understand-azure-active-directory"
+n = 8
+slug = "8-summary"
+title = "Summary"
+kind = "summary"
+objectives = []
+
+# --- create-configure-manage-identities (14) ---
+
+[[units]]
+module = "create-configure-manage-identities"
+n = 1
+slug = "1-introduction"
+title = "Introduction"
+kind = "intro"
+objectives = []
+
+[[units]]
+module = "create-configure-manage-identities"
+n = 2
+slug = "2-users"
+title = "Create, configure, and manage users"
+kind = "concept"
+objectives = ["D1.1.1", "D1.1.2"]
+
+[[units]]
+module = "create-configure-manage-identities"
+n = 3
+slug = "3-exercise-assign-licenses-users"
+title = "Exercise - assign licenses to users"
+kind = "exercise"
+objectives = ["D1.1.3"]
+
+[[units]]
+module = "create-configure-manage-identities"
+n = 4
+slug = "4-exercise-restore-remove-deleted-users"
+title = "Exercise - restore or remove deleted users"
+kind = "exercise"
+objectives = ["D1.1.1"]
+
+[[units]]
+module = "create-configure-manage-identities"
+n = 5
+slug = "5-groups"
+title = "Create, configure, and manage groups"
+kind = "concept"
+objectives = ["D1.1.1"]
+
+[[units]]
+module = "create-configure-manage-identities"
+n = 6
+slug = "6-exercise-add-groups-azure-active-directory"
+title = "Exercise - add groups in Microsoft Entra ID"
+kind = "exercise"
+objectives = ["D1.1.1"]
+
+[[units]]
+module = "create-configure-manage-identities"
+n = 7
+slug = "7-configure-manage-device-registration"
+title = "Configure and manage device registration"
+kind = "concept"
+objectives = []
+off_blueprint = true
+
+[[units]]
+module = "create-configure-manage-identities"
+n = 8
+slug = "8-manage-licenses"
+title = "Manage licenses"
+kind = "concept"
+objectives = ["D1.1.3"]
+
+[[units]]
+module = "create-configure-manage-identities"
+n = 9
+slug = "9-exercise-change-group-license-assignments"
+title = "Exercise - change group license assignments"
+kind = "exercise"
+objectives = ["D1.1.3"]
+
+[[units]]
+module = "create-configure-manage-identities"
+n = 10
+slug = "10-exercise-change-user-license-assignments"
+title = "Exercise - change user license assignments"
+kind = "exercise"
+objectives = ["D1.1.3"]
+
+[[units]]
+module = "create-configure-manage-identities"
+n = 11
+slug = "11-create-custom-security-attributes"
+title = "Create custom security attributes"
+kind = "concept"
+objectives = ["D1.1.2"]
+
+[[units]]
+module = "create-configure-manage-identities"
+n = 12
+slug = "12-explore-automatic-user-creation"
+title = "Explore automatic user creation"
+kind = "concept"
+objectives = []
+off_blueprint = true
+
+[[units]]
+module = "create-configure-manage-identities"
+n = 13
+slug = "13-knowledge-check"
+title = "Module assessment"
+kind = "assessment"
+objectives = []
+
+[[units]]
+module = "create-configure-manage-identities"
+n = 14
+slug = "14-summary-resources"
+title = "Summary and resources"
+kind = "summary"
+objectives = []
+
+# --- describe-core-architectural-components-of-azure (7) ---
+
+[[units]]
+module = "describe-core-architectural-components-of-azure"
+n = 1
+slug = "1-introduction"
+title = "Introduction"
+kind = "intro"
+objectives = []
+
+[[units]]
+module = "describe-core-architectural-components-of-azure"
+n = 2
+slug = "2-what-microsoft-azure"
+title = "What is Microsoft Azure"
+kind = "concept"
+objectives = []
+off_blueprint = true
+
+[[units]]
+module = "describe-core-architectural-components-of-azure"
+n = 3
+slug = "3-get-started-azure-accounts"
+title = "Get started with Azure accounts"
+kind = "concept"
+objectives = ["D1.3.5"]
+
+[[units]]
+module = "describe-core-architectural-components-of-azure"
+n = 4
+slug = "5-describe-azure-physical-infrastructure"
+title = "Describe Azure physical infrastructure"
+kind = "concept"
+objectives = []
+off_blueprint = true
+
+[[units]]
+module = "describe-core-architectural-components-of-azure"
+n = 5
+slug = "6-describe-azure-management-infrastructure"
+title = "Describe Azure management infrastructure"
+kind = "concept"
+objectives = ["D1.3.4", "D1.3.5", "D1.3.7"]
+
+[[units]]
+module = "describe-core-architectural-components-of-azure"
+n = 6
+slug = "8-knowledge-check"
+title = "Module assessment"
+kind = "assessment"
+objectives = []
+
+[[units]]
+module = "describe-core-architectural-components-of-azure"
+n = 7
+slug = "9-summary"
+title = "Summary"
+kind = "summary"
+objectives = []
+
+# --- sovereignty-policy-initiatives (8) ---
+
+[[units]]
+module = "sovereignty-policy-initiatives"
+n = 1
+slug = "overview"
+title = "Introduction"
+kind = "intro"
+objectives = []
+
+[[units]]
+module = "sovereignty-policy-initiatives"
+n = 2
+slug = "cloud-adoption-framework"
+title = "Cloud Adoption Framework for Azure"
+kind = "concept"
+objectives = []
+off_blueprint = true
+
+[[units]]
+module = "sovereignty-policy-initiatives"
+n = 3
+slug = "azure-policy-design-principles"
+title = "Azure Policy design principles"
+kind = "concept"
+objectives = ["D1.3.1"]
+
+[[units]]
+module = "sovereignty-policy-initiatives"
+n = 4
+slug = "azure-policy-resources"
+title = "Azure Policy resources"
+kind = "concept"
+objectives = ["D1.3.1"]
+
+[[units]]
+module = "sovereignty-policy-initiatives"
+n = 5
+slug = "azure-policy-definitions"
+title = "Azure Policy definitions"
+kind = "concept"
+objectives = ["D1.3.1"]
+
+[[units]]
+module = "sovereignty-policy-initiatives"
+n = 6
+slug = "azure-policies-evaluation-resources"
+title = "Evaluation of resources through Azure Policy"
+kind = "concept"
+objectives = ["D1.3.1"]
+
+[[units]]
+module = "sovereignty-policy-initiatives"
+n = 7
+slug = "check"
+title = "Check your knowledge"
+kind = "assessment"
+objectives = []
+
+[[units]]
+module = "sovereignty-policy-initiatives"
+n = 8
+slug = "summary"
+title = "Summary"
+kind = "summary"
+objectives = []
+
+# --- secure-azure-resources-with-rbac (8) ---
+
+[[units]]
+module = "secure-azure-resources-with-rbac"
+n = 1
+slug = "1-introduction"
+title = "Introduction"
+kind = "intro"
+objectives = []
+
+[[units]]
+module = "secure-azure-resources-with-rbac"
+n = 2
+slug = "2-rbac-overview"
+title = "What is Azure RBAC?"
+kind = "concept"
+objectives = ["D1.2.1", "D1.2.2"]
+
+[[units]]
+module = "secure-azure-resources-with-rbac"
+n = 3
+slug = "3-knowledge-check-rbac-overview"
+title = "Module assessment"
+kind = "assessment"
+objectives = []
+
+[[units]]
+module = "secure-azure-resources-with-rbac"
+n = 4
+slug = "4-list-access"
+title = "Exercise - List access using Azure RBAC and the Azure portal"
+kind = "exercise"
+objectives = ["D1.2.3"]
+
+[[units]]
+module = "secure-azure-resources-with-rbac"
+n = 5
+slug = "5-grant-access"
+title = "Exercise - Grant access using Azure RBAC and the Azure portal"
+kind = "exercise"
+objectives = ["D1.2.2"]
+
+[[units]]
+module = "secure-azure-resources-with-rbac"
+n = 6
+slug = "6-view-activity-logs"
+title = "Exercise - View activity logs for Azure RBAC changes"
+kind = "exercise"
+objectives = ["D1.2.3"]
+
+[[units]]
+module = "secure-azure-resources-with-rbac"
+n = 7
+slug = "7-knowledge-check-rbac"
+title = "Module assessment"
+kind = "assessment"
+objectives = []
+
+[[units]]
+module = "secure-azure-resources-with-rbac"
+n = 8
+slug = "8-summary"
+title = "Summary"
+kind = "summary"
+objectives = []
+
+# --- allow-users-reset-their-password (6) ---
+
+[[units]]
+module = "allow-users-reset-their-password"
+n = 1
+slug = "1-introduction"
+title = "Introduction"
+kind = "intro"
+objectives = []
+
+[[units]]
+module = "allow-users-reset-their-password"
+n = 2
+slug = "2-self-service-password-reset"
+title = "What is self-service password reset in Microsoft Entra ID?"
+kind = "concept"
+objectives = ["D1.1.5"]
+
+[[units]]
+module = "allow-users-reset-their-password"
+n = 3
+slug = "3-implement-azure-ad-self-service-password-reset"
+title = "Implement Microsoft Entra self-service password reset"
+kind = "concept"
+objectives = ["D1.1.5"]
+
+[[units]]
+module = "allow-users-reset-their-password"
+n = 4
+slug = "4-exercise-set-up-self-service-password-reset"
+title = "Exercise - Set up self-service password reset"
+kind = "exercise"
+objectives = ["D1.1.5"]
+
+[[units]]
+module = "allow-users-reset-their-password"
+n = 5
+slug = "5-exercise-customize-directory-branding"
+title = "Exercise - Customize directory branding"
+kind = "exercise"
+objectives = ["D1.1.5"]
+
+[[units]]
+module = "allow-users-reset-their-password"
+n = 6
+slug = "6-summary"
+title = "Summary"
+kind = "summary"
+objectives = []
